@@ -5,7 +5,10 @@ import "solidity-coverage";
 
 import "./tasks/accounts";
 import "./tasks/clean";
-import "./tasks/deployers";
+
+if(!process.env.COMPILE_ONLY) {
+  require("./tasks/deployers");
+}
 
 import { resolve } from "path";
 
