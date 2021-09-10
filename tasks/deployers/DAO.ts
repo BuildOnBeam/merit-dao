@@ -3,13 +3,8 @@ import { task } from "hardhat/config";
 import { TaskArguments } from "hardhat/types";
 import { 
     MeritDAO__factory,
-    IERC20,
-    IERC20__factory,
     TimelockController__factory,
     MeritToken__factory,
-    MeritToken,
-    TimelockController, 
-    MeritDAO,
 } from "../../typechain";
 import { constants } from "ethers/lib/ethers";
 import { parseEther } from "ethers/lib/utils";
