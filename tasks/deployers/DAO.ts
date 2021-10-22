@@ -9,6 +9,7 @@ import {
 import { constants } from "ethers/lib/ethers";
 import { parseEther } from "ethers/lib/utils";
 import sleep from "../../utils/sleep";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 const VERIFY_DELAY = 100000;
 const ZERO_BYTES32 = "0x0000000000000000000000000000000000000000000000000000000000000000"
@@ -18,6 +19,28 @@ interface DAODeployment {
     timelock: string,
     DAO: string
 }
+
+task("deploy-token")
+    .setAction(async(taskArgs, {ethers, run}) => {
+        const signers = await ethers.getSigners();
+
+        console.log("Deploying gov token");
+        const token = await new MeritToken__factory(signers[0]).deploy("Merit Circle", "MC", parseEther("1000000000"));
+        console.log(`Gov token deployed at: ${token.address}`);
+        if(taskArgs.verify) {
+            console.log("Verifying gov token, can take some time")
+            await token.deployed();
+            await sleep(VERIFY_DELAY);
+            await run("verify:verify", {
+                address: token.address,
+                constructorArguments: [
+                    taskArgs.tokenName,
+                    taskArgs.tokenSymbol,
+                    parseEther(taskArgs.initialSupply)
+                ]
+            })
+        }
+});
 
 task("deploy-merit-dao")
     .addParam("tokenName", "name of the erc20 gov token")
