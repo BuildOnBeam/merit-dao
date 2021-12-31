@@ -5,7 +5,9 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 
-contract MeritToken is Context, AccessControlEnumerable, ERC20Votes {
+import "./interfaces/IMeritToken.sol";
+
+contract MeritToken is Context, AccessControlEnumerable, ERC20Votes, IMeritToken {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
 
@@ -19,11 +21,11 @@ contract MeritToken is Context, AccessControlEnumerable, ERC20Votes {
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());  
     }
 
-    function mint(address _to, uint256 _amount) onlyHasRole(MINTER_ROLE) external {
+    function mint(address _to, uint256 _amount) onlyHasRole(MINTER_ROLE) override external {
         _mint(_to, _amount);
     }
 
-    function burn(address _from, uint256 _amount) onlyHasRole(BURNER_ROLE) external {
+    function burn(address _from, uint256 _amount) onlyHasRole(BURNER_ROLE) override external {
         _burn(_from, _amount);
     }
 
