@@ -1,1 +1,2 @@
-import "./DAO.ts";
+import "./DAO";
+import "./TokenBurner";
